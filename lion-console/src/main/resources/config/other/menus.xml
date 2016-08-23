@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menus>
+	<menu name="project">
+		<sub-menu name="configitem" label="配置项" url="/config/configList.vhtml"/>
+		<sub-menu name="appoplog" label="操作日志" url="/system/appoplog.vhtml"/>
+		<!-- 
+		<sub-menu name="projectmember" label="人员管理" url="/"/>
+		 -->
+	</menu>
+	
+	<!-- 
+	<menu name="testitem" label="测试菜单项" url="/"/>
+	 -->
+	
+	<!-- 
+	<group label="个人中心">
+		<group label="base">
+			<menu name="workbench" label="工作台" url="/"/>
+			<menu name="userlog" label="操作日志" url="/"/>
+		</group>
+	</group>
+	 -->
+	
+	<group label="系统选项">
+		<menu name="envsetting" label="环境管理" url="/system/envSetting.vhtml" resource="res_env_list"/>
+		<menu name="projectconfig" label="项目管理" url="/system/projectList.vhtml"/>
+		<menu name="usersetting" label="用户管理" url="/system/userList.vhtml" resource="res_user"/>
+		<menu name="security" label="权限管理" url="/privilege/privilegeList.vhtml" resource="res_security"/>
+		<menu name="oplog" label="操作日志" url="/system/oplog.vhtml" resource="res_oplog_view"/>
+		<menu name="jobmanagement" label="任务管理" url="/system/jobManagement.vhtml" resource="res_job"/>
+		<menu name="cachemanagement" label="缓存管理" url="/system/cacheManage.vhtml" resource="res_cache"/>
+        <menu name="globalSearchForm" label="配置搜索" url="/system/globalSearchForm.vhtml"/>
+        <menu name="globalConfigDiff" label="配置比较" url="/system/selectTeam.vhtml" resource="res_oplog_view"/>
+		<!-- 
+		<menu name="syssetting" label="系统设置" url="/"/>
+		<menu sperator="true"/>
+		<menu name="aboutlion" label="关于lion" url="/"/>
+		 -->
+	</group>
+</menus>

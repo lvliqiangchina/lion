@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Project">
+	<typeAlias alias="Team" type="com.dianping.lion.entity.Team" />
+	<typeAlias alias="Product" type="com.dianping.lion.entity.Product" />
+	<typeAlias alias="Project" type="com.dianping.lion.entity.Project" />
+	<typeAlias alias="ProjectStatus" type="com.dianping.lion.entity.ProjectStatus" />
+	<typeAlias alias="ProjectMember" type="com.dianping.lion.entity.ProjectMember" />
+
+	<resultMap id="TeamResultBasic" class="Team">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="createTime" property="createTime"/>
+		<result column="modifyTime" property="modifyTime"/>
+		<result column="seq" property="seq"/>
+	</resultMap>
+	
+	<resultMap id="TeamResult" class="Team" extends="TeamResultBasic">
+		<result property="products" column="id" select="Project.selectProductsByTeam"/>
+	</resultMap>
+
+	<resultMap id="ProductResultBasic" class="Product">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="teamId" property="teamId"/>
+		<result column="createTime" property="createTime"/>
+		<result column="modifyTime" property="modifyTime"/>
+		<result column="seq" property="seq"/>
+	</resultMap>
+
+	<resultMap id="ProjectResultExtra" class="Project">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="productName" property="productName"/>
+		<result column="teamName" property="teamName"/>
+	</resultMap>
+	
+	<resultMap id="ProductResult" class="Product" extends="ProductResultBasic">
+		<result property="projects" column="id" select="Project.selectProjectsByProduct"/>
+	</resultMap>
+	
+	<resultMap id="ProductReverseResult" class="Product" extends="ProductResultBasic">
+		<result property="team" column="teamId" select="Project.getTeam"/>
+	</resultMap>
+	
+	<resultMap id="ProjectResultBasic" class="Project">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="productId" property="productId"/>
+		<result column="createTime" property="createTime"/>
+		<result column="modifyTime" property="modifyTime"/>
+		<result column="seq" property="seq"/>
+	</resultMap>
+	
+	<resultMap id="ProjectResult" class="Project" extends="ProjectResultBasic">
+		<result column="productName" property="productName"/>
+		<result column="teamName" property="teamName"/>
+	</resultMap>
+	
+	<resultMap id="ProjectReverseResult" class="Project" extends="ProjectResultBasic">
+		<result property="product" column="productId" select="Project.getProduct"/>
+	</resultMap>
+	
+	<resultMap id="MemberResultBasic" class="ProjectMember">
+		<result column="id" property="id"/>
+		<result column="projectId" property="projectId"/>
+		<result column="userId" property="userId"/>
+		<result column="createUserId" property="createUserId"/>
+		<result column="createTime" property="createTime"/>
+	</resultMap>
+	
+	<resultMap id="MemberReverseResult" class="ProjectMember" extends="MemberResultBasic">
+		<result property="user" resultMap="User.UserResultBasic2"/>
+	</resultMap>
+	
+	<select id="getTeams" resultMap="TeamResult">
+		<![CDATA[
+		SELECT id, name, createTime, modifyTime, seq
+		FROM team
+		ORDER BY seq, id
+		]]>
+    </select>
+    
+    <select id="selectProductsByTeam" resultMap="ProductResult" parameterClass="int">
+    	<![CDATA[
+    	SELECT id, name, teamId, createTime, modifyTime, seq
+    	FROM product
+    	WHERE teamId = #teamId#
+    	ORDER BY seq, id
+    	]]>
+    </select>
+    
+    <select id="selectProjectsByProduct" resultMap="ProjectResultBasic" parameterClass="int">
+    	<![CDATA[
+    	SELECT id, name, productId, createTime, modifyTime, seq
+    	FROM project
+    	WHERE productId = #productId#
+    	ORDER BY seq, id
+    	]]>
+    </select>
+    
+    <select id="getProjects" resultMap="ProjectResult">
+		<![CDATA[
+		SELECT pj.id, pj.name,pj.productId,pd.name as productName,t.name as teamName,pj.createTime, pj.modifyTime, pj.seq
+		FROM project pj,product pd,team t
+		where pd.id = pj.productId and pd.teamId = t.id
+		ORDER BY t.seq,pd.seq,pj.seq
+		]]>
+    </select>
+
+	<select id="getProjectsExtra" resultMap="ProjectResultExtra">
+		SELECT pj.id, pj.name, pd.name as productName, t.name as teamName
+		FROM project pj INNER JOIN product pd ON pj.productId = pd.id
+		                INNER JOIN team t ON pd.teamId = t.id
+		WHERE pj.id = #projectId#
+	</select>
+    
+    <select id="getProjectsByTeamAndProduct" resultMap="ProjectResult" parameterClass="java.util.Map">
+		
+		SELECT pj.id, pj.name, pj.productId,pd.name as productName,t.name as teamName,pj.createTime, pj.modifyTime, pj.seq
+		FROM project pj,product pd,team t
+		where pd.id = pj.productId
+		and pd.teamId = t.id
+		<dynamic>
+		<isGreaterThan prepend="and" property="teamId" compareValue="0">
+             pd.teamId = #teamId#
+        </isGreaterThan>
+        <isGreaterThan prepend="and" property="productId" compareValue="0">
+             pj.productId = #productId#
+        </isGreaterThan>
+        </dynamic>
+		ORDER BY t.seq, t.id, pd.seq, pd.id, pj.seq, pj.id
+		
+    </select>
+    
+    <select id="getTeam" resultMap="TeamResultBasic" parameterClass="int">
+    	<![CDATA[SELECT * FROM team WHERE id = #teamId#]]>
+    </select>
+    
+    <select id="getProduct" resultMap="ProductReverseResult" parameterClass="int">
+    	<![CDATA[SELECT * FROM product WHERE id = #productId#]]>
+    </select>
+    
+    <select id="getProject" resultMap="ProjectReverseResult" parameterClass="int">
+    	<![CDATA[SELECT * FROM project WHERE id = #projectId#]]>
+    </select>
+    
+    <select id="findProjectByName" resultMap="ProjectReverseResult" parameterClass="string">
+    	<![CDATA[SELECT * FROM project WHERE name = #name#]]>
+    </select>
+    
+    <insert id="insertProject" parameterClass="Project">
+    	INSERT INTO project(name,  productId,createTime, modifyTime)
+    	VALUES(#name#,  #productId#, #createTime#, #modifyTime#)
+    	<selectKey resultClass="int">    
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey> 
+    </insert>
+    
+    <update id="updateProject" parameterClass="Project">
+    	update project set name=#name#, productId=#productId#,createTime=#createTime#, modifyTime=#modifyTime#
+    	where id = #id#
+    </update>
+    
+    <delete id="delProject" parameterClass="int">
+		delete from project where id=#id#
+    </delete>
+    
+    <statement id="lockProject" parameterClass="int">
+    	<![CDATA[SELECT 1 FROM project WHERE id = #projectId# FOR UPDATE]]>
+    </statement>
+    
+    <select id="findMember" parameterClass="map" resultMap="MemberResultBasic">
+    		SELECT * FROM project_member WHERE projectId = #projectId# AND userId = #userId#
+    </select>
+    <select id="findOwners" parameterClass="int" resultMap="MemberReverseResult">
+    		SELECT m.*, u.* FROM project_owner m INNER JOIN user u ON m.userId = u.id WHERE m.projectId = #value#
+    </select>
+    <select id="findMemebers" parameterClass="int" resultMap="MemberReverseResult">
+    		SELECT m.*, u.* FROM project_member m INNER JOIN user u ON m.userId = u.id WHERE m.projectId = #value#
+    </select>
+    <select id="findOperators" parameterClass="int" resultMap="MemberReverseResult">
+    		SELECT m.*, u.* FROM project_operator m INNER JOIN user u ON m.userId = u.id WHERE m.projectId = #value#
+    </select>
+    <insert id="addOwner" parameterClass="map">
+    		INSERT INTO project_owner(projectId, userId, createUserId, createTime)
+    		VALUES(#projectId#, #userId#, #createUserId#, NOW())
+    </insert>
+    <insert id="addMember" parameterClass="map">
+    		INSERT INTO project_member(projectId, userId, createUserId, createTime)
+    		VALUES(#projectId#, #userId#, #createUserId#, NOW())
+    </insert>
+    <insert id="addOperator" parameterClass="map">
+    		INSERT INTO project_operator(projectId, userId, createUserId, createTime)
+    		VALUES(#projectId#, #userId#, #createUserId#, NOW())
+    </insert>
+    <delete id="deleteOwner" parameterClass="map">
+    		DELETE FROM project_owner WHERE projectId = #projectId# AND userId = #userId#
+    </delete>
+    <delete id="deleteMember" parameterClass="map">
+    		DELETE FROM project_member WHERE projectId = #projectId# AND userId = #userId#
+    </delete>
+    <delete id="deleteOperator" parameterClass="map">
+    		DELETE FROM project_operator WHERE projectId = #projectId# AND userId = #userId#
+    </delete>
+    
+</sqlMap>

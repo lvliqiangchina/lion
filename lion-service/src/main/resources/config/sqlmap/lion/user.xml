@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+	<typeAlias alias="User" type="com.dianping.lion.entity.User" />
+	
+	<resultMap id="UserResultBasic_" class="User">
+		<result column="loginName" property="loginName"/>
+		<result column="name" property="name"/>
+		<result column="email" property="email"/>
+		<result column="system" property="system"/>
+		<result column="locked" property="locked"/>
+		<result column="onlineConfigView" property="onlineConfigView"/>
+		<result column="createTime" property="createTime"/>
+	</resultMap>
+
+	<resultMap id="UserResultBasic" class="User" extends="UserResultBasic_">
+		<result column="password" property="password"/>
+		<result column="id" property="id"/>
+	</resultMap>
+	
+	<resultMap id="UserWithRoleResult" class="User" extends="UserResultBasic">
+		<result property="roles" column="id" select="Privilege.getUserRoles"/>
+	</resultMap>
+
+	<resultMap id="UserNoPasswordResult" class="User" extends="UserResultBasic_">
+		<result column="id" property="id"/>
+	</resultMap>
+
+	<resultMap id="UserResultBasic2" class="User" extends="UserResultBasic_">
+		<result column="userId" property="id"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="UserNoPasswordResult">
+		<![CDATA[
+		SELECT * FROM user ORDER BY `name`
+		]]>
+    </select>
+    
+    <select id="findById" resultMap="UserWithRoleResult">
+		<![CDATA[
+		SELECT * FROM user WHERE id = #id# ORDER BY id
+		]]>
+    </select>
+    
+    <select id="findByNameOrLoginNameLike" resultMap="UserNoPasswordResult" parameterClass="map">
+   		SELECT * FROM user WHERE (loginName LIKE CONCAT('%', #name#, '%') OR name LIKE CONCAT('%', #name#, '%'))
+    	<isEqual property="includeSystem" compareValue="false">
+    		AND system = 0
+    	</isEqual>	
+    </select>
+    
+    <select id="findByName" resultMap="UserWithRoleResult">
+		<![CDATA[
+		SELECT * FROM user WHERE loginName = #userName# ORDER BY id
+		]]>
+    </select>
+    
+    <sql id="getUser_Fragment">
+    	<dynamic>
+    		<isNotNull prepend="AND" property="criteria.name">
+    			u.name LIKE CONCAT('%', #criteria.name#, '%')
+    		</isNotNull>
+    		<isNotNull prepend="AND" property="criteria.loginName">
+    			u.loginName LIKE CONCAT('%', #criteria.loginName#, '%')
+    		</isNotNull>
+    		<isNotNull prepend="AND" property="criteria.system">
+    			u.system = #criteria.system#
+    		</isNotNull>
+    		<isNotNull prepend="AND" property="criteria.locked">
+    			u.locked = #criteria.locked#
+    		</isNotNull>
+    		<isNotNull prepend="AND" property="criteria.onlineConfigView">
+    			u.onlineConfigView = #criteria.onlineConfigView#
+    		</isNotNull>
+    	</dynamic>
+    </sql>
+    
+    <select id="getUserCount" resultClass="long" parameterClass="map">
+    	SELECT COUNT(*)
+    	FROM user u
+    	WHERE 1 = 1
+    	<include refid="getUser_Fragment"/>
+    </select>
+    
+    <select id="getUserList" resultMap="UserNoPasswordResult" parameterClass="map">
+    	SELECT *
+    	FROM user u
+    	WHERE 1 = 1
+    	<include refid="getUser_Fragment"/>
+    	ORDER BY convert(u.name using gb2312)
+    	LIMIT #paginater.firstResult#, #paginater.maxResults#
+    </select>
+    
+    <insert id="insertUser" parameterClass="User">
+		<![CDATA[
+		insert into user(loginName, name, email, system, createTime, locked, onlineConfigView, password) 
+		values(#loginName#, #name#, #email#, #system#, NOW(), #locked#, #onlineConfigView#, #password#)
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+             <![CDATA[   select last_insert_id() as id  ]]>
+        </selectKey>
+    </insert>
+    
+    <update id="updateUser" parameterClass="User">
+    	UPDATE user 
+    	SET loginName = #loginName#, name = #name#, email = #email#, system = #system#, locked = #locked#, password = #password#,
+    		onlineConfigView = #onlineConfigView#
+    	WHERE id = #id#
+    </update>
+    
+    <update id="updateMD5Password" parameterClass="User">
+		<![CDATA[
+		update user set password = #password# where id = #id#
+		]]>
+    </update>
+    
+</sqlMap>

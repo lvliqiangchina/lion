@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="system" namespace="/system" extends="default">
+		
+		<action name="projectList" class="com.dianping.lion.web.action.system.ProjectAction">
+			<result name="success">/WEB-INF/pages/system/project-list.ftl</result>
+		</action>
+		<action name="projectAdd" class="com.dianping.lion.web.action.system.ProjectAction" method="projectAdd">
+			<result name="success">/WEB-INF/pages/system/project-message.ftl</result>
+		</action>
+		<action name="projectEdit" class="com.dianping.lion.web.action.system.ProjectAction" method="projectEdit">
+			<result name="success">/WEB-INF/pages/system/project-message.ftl</result>
+		</action>
+		<action name="projectDel" class="com.dianping.lion.web.action.system.ProjectAction" method="projectDel">
+			<result name="success">/WEB-INF/pages/system/project-message.ftl</result>
+		</action>
+		
+		<action name="getMembersAjax" class="com.dianping.lion.web.action.system.ProjectAction" method="getAllMembers">
+			<result name="success">/WEB-INF/pages/system/project-member-list.ftl</result>
+		</action>
+		<action name="addMemeberAjax" class="com.dianping.lion.web.action.system.ProjectAction" method="addMember">
+			<result name="success" type="stream"/>
+		</action>
+		<action name="deleteMemeberAjax" class="com.dianping.lion.web.action.system.ProjectAction" method="deleteMember">
+			<result name="success" type="stream"/>
+		</action>
+		
+		<!-- 产品线操作 -->
+		<action name="productList" class="com.dianping.lion.web.action.system.ProductAction" method="productList">
+			<result name="success">/WEB-INF/pages/system/product.ftl</result>
+		</action>
+		<action name="productAddAjax" class="com.dianping.lion.web.action.system.ProductAction" method="productAdd">
+			<result name="success">/WEB-INF/pages/system/product-detail.ftl</result>
+		</action>
+		<action name="productAddSubmitAjax" class="com.dianping.lion.web.action.system.ProductAction" method="productAddSubmit">
+			<result name="success">/WEB-INF/pages/system/product-list.ftl</result>
+		</action>
+		<action name="productEditAjax" class="com.dianping.lion.web.action.system.ProductAction" method="productEdit">
+			<result name="success">/WEB-INF/pages/system/product-detail.ftl</result>
+		</action>
+		<action name="productEditSubmitAjax" class="com.dianping.lion.web.action.system.ProductAction" method="productEditSubmit">
+			<result name="success">/WEB-INF/pages/system/product-list.ftl</result>
+		</action>
+		<action name="productDeleteAjax" class="com.dianping.lion.web.action.system.ProductAction" method="deleteProductAjax">
+			<result name="success">/WEB-INF/pages/system/product-list.ftl</result>
+			<result name="error">/WEB-INF/pages/system/error.ftl</result>
+		</action>
+		
+		<!-- 部门操作 -->
+		<action name="teamList" class="com.dianping.lion.web.action.system.TeamAction" method="teamList">
+			<result name="success">/WEB-INF/pages/system/team.ftl</result>
+		</action>
+		<action name="teamAddAjax" class="com.dianping.lion.web.action.system.TeamAction" method="teamAdd">
+			<result name="success">/WEB-INF/pages/system/team-detail.ftl</result>
+		</action>
+		<action name="teamAddSubmitAjax" class="com.dianping.lion.web.action.system.TeamAction" method="teamAddSubmit">
+			<result name="success">/WEB-INF/pages/system/team-list.ftl</result>
+		</action>
+		<action name="teamEditAjax" class="com.dianping.lion.web.action.system.TeamAction" method="teamEdit">
+			<result name="success">/WEB-INF/pages/system/team-detail.ftl</result>
+		</action>
+		<action name="teamEditSubmitAjax" class="com.dianping.lion.web.action.system.TeamAction" method="teamEditSubmit">
+			<result name="success">/WEB-INF/pages/system/team-list.ftl</result>
+		</action>
+		<action name="teamDeleteAjax" class="com.dianping.lion.web.action.system.TeamAction" method="deleteTeamAjax">
+			<result name="success">/WEB-INF/pages/system/team-list.ftl</result>
+			<result name="error">/WEB-INF/pages/system/error.ftl</result>
+		</action>
+		
+		<action name="getUsersAjax" class="com.dianping.lion.web.action.system.UserAction" method="ajaxGetUsers">
+			<result name="success" type="stream"/>
+		</action>
+		<action name="getUserAjax" class="com.dianping.lion.web.action.system.UserAction" method="ajaxGetUser">
+			<result name="success" type="stream"/>
+		</action>
+		<action name="userList" class="com.dianping.lion.web.action.system.UserAction" method="list">
+			<result name="success">/WEB-INF/pages/system/user-list.ftl</result>
+		</action>
+		<action name="userListAjax" class="com.dianping.lion.web.action.system.UserAction" method="ajaxList">
+			<result name="success">/WEB-INF/pages/system/user-list-table.ftl</result>
+		</action>
+		<action name="updateUserAjax" class="com.dianping.lion.web.action.system.UserAction" method="editUser">
+			<result name="success" type="stream"/>
+		</action>
+		
+		<!-- 操作日志 -->
+		<action name="oplog" class="com.dianping.lion.web.action.system.OperationLogAction" method="getOpLogs">
+			<result name="success">/WEB-INF/pages/system/operation-log.ftl</result>
+		</action>
+		<action name="appoplog" class="com.dianping.lion.web.action.system.OperationLogAction" method="getOpLogsByProject">
+			<result name="success">/WEB-INF/pages/system/operation-log-project.ftl</result>
+		</action>
+		<action name="viewKeysAjax" class="com.dianping.lion.web.action.system.OperationLogAction" method="viewKeys">
+			<result name="success">/WEB-INF/pages/system/operation-log-detail.ftl</result>
+		</action>
+		
+		<!-- 环境操作 -->
+		<action name="envSetting" class="com.dianping.lion.web.action.system.EnvironmentAction" method="getEnvLists">
+			<result name="success">/WEB-INF/pages/system/environment.ftl</result>
+		</action>
+		<action name="envAddAjax" class="com.dianping.lion.web.action.system.EnvironmentAction" method="addEnv">
+			<result name="success">/WEB-INF/pages/system/environment-detail.ftl</result>
+		</action>
+		<action name="addEnvSubmitAjax" class="com.dianping.lion.web.action.system.EnvironmentAction" method="addEnvSubmit">
+			<result name="success">/WEB-INF/pages/system/environment-list.ftl</result>
+		</action>
+		<action name="envEditAjax" class="com.dianping.lion.web.action.system.EnvironmentAction" method="editEnv">
+			<result name="success">/WEB-INF/pages/system/environment-detail.ftl</result>
+		</action>
+		<action name="updateEnvSubmitAjax" class="com.dianping.lion.web.action.system.EnvironmentAction" method="editEnvSubmit">
+			<result name="success">/WEB-INF/pages/system/environment-list.ftl</result>
+		</action>
+		<action name="deleteEnvAjax" class="com.dianping.lion.web.action.system.EnvironmentAction" method="deleteEnvAjax">
+			<result name="success">/WEB-INF/pages/system/environment-list.ftl</result>
+		</action>
+		
+		<!-- 任务管理  -->
+		<action name="jobManagement" class="com.dianping.lion.web.action.system.JobManagementAction" method="getJobLists">
+			<result name="success">/WEB-INF/pages/system/jobmanagement.ftl</result>
+		</action>
+		<action name="jobAddAjax" class="com.dianping.lion.web.action.system.JobManagementAction" method="addJob">
+			<result name="success">/WEB-INF/pages/system/jobmanagement-detail.ftl</result>
+		</action>
+		<action name="addJobSubmitAjax" class="com.dianping.lion.web.action.system.JobManagementAction" method="addJobSubmit">
+			<result name="success">/WEB-INF/pages/system/jobmanagement-list.ftl</result>
+		</action>
+		<action name="jobEditAjax" class="com.dianping.lion.web.action.system.JobManagementAction" method="editJob">
+			<result name="success">/WEB-INF/pages/system/jobmanagement-detail.ftl</result>
+		</action>
+		<action name="updateJobSubmitAjax" class="com.dianping.lion.web.action.system.JobManagementAction" method="editJobSubmit">
+			<result name="success">/WEB-INF/pages/system/jobmanagement-list.ftl</result>
+		</action>
+		<action name="jobDeleteAjax" class="com.dianping.lion.web.action.system.JobManagementAction" method="deleteJobAjax">
+			<result name="success">/WEB-INF/pages/system/jobmanagement-list.ftl</result>
+			<result name="error">/WEB-INF/pages/system/error.ftl</result>
+		</action>
+		
+		<action name="cacheManage" class="com.dianping.lion.web.action.system.CacheManageAction">
+			<result name="success">/WEB-INF/pages/system/cache-manage.ftl</result>
+		</action>
+		<action name="clearCacheAjax" class="com.dianping.lion.web.action.system.CacheManageAction" method="clearCache">
+			<result name="success" type="stream"/>
+		</action>
+
+		<!--Global Search-->
+		<action name="globalSearchForm" class="com.dianping.lion.web.action.system.GlobalSearchAction" method="globalSearchForm">
+			<result name="success">/WEB-INF/pages/system/global-search.ftl</result>
+		</action>
+		<action name="globalSearch" class="com.dianping.lion.web.action.system.GlobalSearchAction" method="globalSearch">
+			<result name="success">/WEB-INF/pages/system/global-search.ftl</result>
+		</action>
+
+        <!--Global Config Diff-->
+        <action name="selectTeam" class="com.dianping.lion.web.action.system.GlobalConfigDiffAction" method="selectTeam">
+            <result name="success">/WEB-INF/pages/system/global-config-diff.ftl</result>
+        </action>
+
+        <action name="selectProductAjax" class="com.dianping.lion.web.action.system.GlobalConfigDiffAction" method="ajaxSelectProduct">
+            <result name="success" type="stream"></result>
+        </action>
+
+		<action name="selectProjectAjax" class="com.dianping.lion.web.action.system.GlobalConfigDiffAction" method="ajaxSelectProject">
+			<result name="success" type="stream"></result>
+		</action>
+
+		<action name="globalConfigDiff" class="com.dianping.lion.web.action.system.GlobalConfigDiffAction" method="globalConfigDiff">
+			<result name="success">/WEB-INF/pages/system/global-config-diff.ftl</result>
+		</action>
+
+        <!--Config Diff-->
+        <action name="localConfigDiff" class="com.dianping.lion.web.action.system.LocalConfigDiffAction" method="localConfigDiff">
+            <result name="success">/WEB-INF/pages/system/local-config-diff.ftl</result>
+        </action>
+
+		<action name="localConfigDiffNumDetail" class="com.dianping.lion.web.action.system.LocalConfigDiffAction" method="localConfigDiffNumDetail">
+			<result name="success">/WEB-INF/pages/system/local-config-diff.ftl</result>
+		</action>
+
+		<action name="localConfigOmitNumDetail" class="com.dianping.lion.web.action.system.LocalConfigDiffAction" method="localConfigOmitNumDetail">
+			<result name="success">/WEB-INF/pages/system/local-config-diff.ftl</result>
+		</action>
+
+	</package>
+
+</struts>

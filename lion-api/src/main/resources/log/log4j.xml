@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//log4j/log4j Configuration//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+	threshold="null" debug="null">
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="${lion-api.log4j.console.minLevel}" />
+        </filter>
+	</appender>
+
+	<appender name="appInfoAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- <param name="Threshold" value="INFO" /> -->
+		<param name="File" value="/data/applogs/lion-api/logs/app-info.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+       	 	<param name="LevelMax" value="INFO" />
+		</filter>
+	</appender>
+	<appender name="appWarnAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- <param name="Threshold" value="INFO" /> -->
+		<param name="File" value="/data/applogs/lion-api/logs/app-warn.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="WARN" />  
+       	 	<param name="LevelMax" value="WARN" />
+		</filter>
+	</appender>
+	<appender name="appErrorAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- <param name="Threshold" value="INFO" /> -->
+		<param name="File" value="/data/applogs/lion-api/logs/app-error.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />  
+       	 	<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+	
+	<appender name="ibatisAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- <param name="Threshold" value="INFO" /> -->
+		<param name="File" value="/data/applogs/lion-api/logs/ibatis.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="illegalAccessAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/applogs/lion-api/logs/illegalAccess.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="illegalParameterAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/applogs/lion-api/logs/illegalParameter.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[lion-api]%d %-5p [%c %L] %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.ibatis" additivity="false">
+		<level value="WARN" />
+		<appender-ref ref="ibatisAppender" />
+	</logger>
+	
+	<logger name="org.apache.commons.httpclient.HttpMethodBase" additivity="false">
+		<level value="ERROR" />
+	</logger>
+
+	<logger name="java.sql">
+		<level value="WARN" />
+	</logger>
+	
+	<logger name="org.apache.struts2">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.apache.struts2.dispatcher.Dispatcher"	additivity="false">
+		<level value="WARN" />
+		<appender-ref ref="illegalAccessAppender" />
+	</logger>
+	
+	<logger name="com.opensymphony.xwork2.ognl.OgnlValueStack" additivity="false">
+		<level value="WARN" />
+		<appender-ref ref="illegalParameterAppender" />
+	</logger>
+	
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="appInfoAppender" />
+		<appender-ref ref="appWarnAppender" />
+		<appender-ref ref="appErrorAppender" />
+	</root>
+	
+</log4j:configuration>
